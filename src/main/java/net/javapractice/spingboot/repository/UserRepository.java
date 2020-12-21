@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import net.javapractice.spingboot.model.User;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, Long> {
+public interface UserRepository extends MongoRepository<User, String> {
 
 }
