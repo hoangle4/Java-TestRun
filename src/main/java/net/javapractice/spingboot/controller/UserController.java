@@ -1,7 +1,7 @@
 package net.javapractice.spingboot.controller;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ public class UserController {
 	}
 	
 	@GetMapping("{userId}")
-	public User getUser(@PathVariable String userId) {
+	public Optional<User> getUser(@PathVariable String userId) {
 		LOG.info("Getting user with ID: {}.", userId);
 		return userRepository.findById(userId);
 	}
@@ -50,7 +50,10 @@ public class UserController {
 
 	@RequestMapping(value = "settings/{userId}", method = RequestMethod.GET)
 	public Object getAllUserSettings(@PathVariable String userId) {
-		User user = userRepository.findById(userId);
+		
+		Optional<User> optionalUser = userRepository.findById(userId);
+		User user = optionalUser.get();
+		
 		if (user != null) {
 			return user.getUserSettings();
 		} else {
@@ -60,7 +63,10 @@ public class UserController {
 	
 	@RequestMapping(value = "/settings/{userId}/{key}", method = RequestMethod.GET)
 	public String getUserSetting(@PathVariable String userId, @PathVariable String key) {
-		User user = userRepository.findById(userId);
+	
+		Optional<User> optionalUser = userRepository.findById(userId);
+		User user = optionalUser.get();
+		
 		if (user != null) {
 			return user.getUserSettings().get(key);
 		} else {
@@ -70,7 +76,10 @@ public class UserController {
 	
 	@RequestMapping(value = "/settings/{userId}/{key}/{value}", method = RequestMethod.GET)
 	public String addUserSetting(@PathVariable String userId, @PathVariable String key, @PathVariable String value) {
-		User user = userRepository.findById(userId);
+
+		Optional<User> optionalUser = userRepository.findById(userId);
+		User user = optionalUser.get();
+		
 		if (user != null) {
 			user.getUserSettings().put(key, value);
 			userRepository.save(user);
